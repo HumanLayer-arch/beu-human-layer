@@ -7,7 +7,7 @@
 // Reemplaza estos dos valores con los de tu proyecto Supabase:
 // Dashboard → Settings → API
 const SUPABASE_URL  = "https://sjyidyymmeasjdrwldsd.supabase.co";
-const SUPABASE_KEY  = "TU_ANON_PUBLIC_KEY_AQUI"; // ← pega aquí tu anon/public key
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
 
 // ── CLIENTE ───────────────────────────────────────────────
 // En la versión UMD de Supabase JS v2 el objeto global se llama `supabase`
