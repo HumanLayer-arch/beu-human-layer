@@ -92,9 +92,10 @@ Reflexionar una decisión
 
 const SUPABASE_URL = "https://sjyidyymmeasjdrwldsd.supabase.co"
 
-const SUPABASE_KEY = "sb_publishable_CtLe0WxLz2TwdcRVLZ84uA_-soFwz4q"
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIs..."
 
-const { createClient } = supabase;
+const { createClient } = supabase
+
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY)
 
 async function registrarUsuario() {
