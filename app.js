@@ -13,7 +13,10 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 // En la versión UMD de Supabase JS v2 el objeto global se llama `supabase`
 // y el método para crear el cliente es `supabase.createClient`
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+// limpiar token de la URL después del login
+if (window.location.hash.includes("access_token")) {
+  window.history.replaceState({}, document.title, window.location.pathname);
+}
 // ── ESTADO ────────────────────────────────────────────────
 let sesionActual = null;
 
