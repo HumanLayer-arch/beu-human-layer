@@ -42,7 +42,31 @@ margin-top:20px;
 <body>
 
 <div class="container">
+<h2>Crear cuenta o entrar</h2>
 
+<input id="email" placeholder="Tu email">
+<br><br>
+
+<input id="password" type="password" placeholder="Contraseña">
+<br><br>
+
+<button onclick="registrarUsuario()">Registrarse</button>
+
+<button onclick="loginUsuario()">Entrar</button>
+
+<hr>
+
+<h2>Reflexionar una decisión</h2>
+
+<textarea id="decision" placeholder="¿Qué decisión estás considerando?" rows="4" cols="40"></textarea>
+
+<br><br>
+
+<textarea id="reflexion" placeholder="Escribe tu reflexión..." rows="4" cols="40"></textarea>
+
+<br><br>
+
+<button onclick="guardarDecision()">Guardar decisión</button>
 <h1>Be U</h1>
 
 <h3>Human Layer</h3>
@@ -60,6 +84,82 @@ Reflexionar una decisión
 </button>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
+<script>
+
+const SUPABASE_URL = "https://sjyidyymmeasjdrwldsd.supabase.co"
+
+const SUPABASE_KEY = "sb_publishable_CtLe0WxLz2TwdcRVLZ84uA_-soFwz4q"
+
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+
+async function registrarUsuario() {
+
+const email = document.getElementById("email").value
+const password = document.getElementById("password").value
+
+const { data, error } = await supabaseClient.auth.signUp({
+email: email,
+password: password
+})
+
+if(error){
+alert(error.message)
+}else{
+alert("Usuario registrado. Revisa tu email.")
+}
+
+}
+
+async function loginUsuario() {
+
+const email = document.getElementById("email").value
+const password = document.getElementById("password").value
+
+const { data, error } = await supabaseClient.auth.signInWithPassword({
+email: email,
+password: password
+})
+
+if(error){
+alert(error.message)
+}else{
+alert("Sesión iniciada correctamente")
+}
+
+}
+
+async function guardarDecision() {
+
+const decision = document.getElementById("decision").value
+const reflexion = document.getElementById("reflexion").value
+
+const { data: { user } } = await supabaseClient.auth.getUser()
+
+if(!user){
+alert("Debes iniciar sesión")
+return
+}
+
+const { error } = await supabaseClient
+.from("decisions")
+.insert([
+{
+user_id: user.id,
+decision_text: decision,
+reflection: reflexion
+}
+])
+
+if(error){
+alert("Error guardando decisión")
+}else{
+alert("Decisión guardada")
+}
+
+}
+
+</script>
 </body>
 </html>
