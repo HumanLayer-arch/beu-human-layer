@@ -91,18 +91,12 @@ Reflexionar una decisión
 <script>
 
 const SUPABASE_URL = "https://sjyidyymmeasjdrwldsd.supabase.co"
-
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIs..."
-
 const { createClient } = supabase
-
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY)
-
 async function registrarUsuario() {
-
 const email = document.getElementById("email").value
 const password = document.getElementById("password").value
-
 const { data, error } = await supabaseClient.auth.signUp({
 email: email,
 password: password
