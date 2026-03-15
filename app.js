@@ -6,7 +6,7 @@
 // ── CONFIGURACIÓN ─────────────────────────────────────────
 // Reemplaza estos dos valores con los de tu proyecto Supabase:
 // Dashboard → Settings → API
-const SUPABASE_URL  = "https://sjyidyymmeasjdrwldsd.supabase.co";
+const SUPABASE_URL = "https://sjyidyymmeasjdrwldsd.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNqeWlkeXltbWVhc2pkcndkbHNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM1NDM0NzEsImV4cCI6MjA4OTExOTQ3MX0.GFxI71MbVtdKOE9Xh3DA8xZkOGiN1bbUJxXvDU1foIo";
 
 // ── CLIENTE ───────────────────────────────────────────────
