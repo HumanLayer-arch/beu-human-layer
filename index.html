@@ -5,13 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
   <meta name="theme-color" content="#f4f1ea"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="apple-mobile-web-app-title" content="Be U"/>
   <meta name="description" content="Decide desde tu mejor version — Human Layer v3"/>
+
   <link rel="manifest" href="manifest.json"/>
+  <link rel="icon" href="icons/icon-192.png"/>
+
   <title>Be U</title>
+
   <style>
-    /* ── TOKENS ─────────────────────────────────── */
+    /* ── TOKENS ─────────────────────────────────── /
     :root {
       --bg:         #f4f1ea;
       --bg-card:    #faf8f4;
@@ -38,448 +42,93 @@
       --safe-b:     env(safe-area-inset-bottom, 0px);
     }
 
-    /* ── RESET ──────────────────────────────────── */
+    / RESET */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { height: 100%; -webkit-text-size-adjust: 100%; }
     body {
       font-family: -apple-system, 'Segoe UI', sans-serif;
-      background: var(--bg); color: var(--ink);
-      min-height: 100dvh; font-size: 16px; line-height: 1.6;
-      -webkit-font-smoothing: antialiased; overscroll-behavior: none;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100dvh;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overscroll-behavior: none;
     }
-    :focus-visible { outline: 2px solid var(--green-2); outline-offset: 2px; }
-    :focus:not(:focus-visible) { outline: none; }
 
-    /* ── ROOT ───────────────────────────────────── */
-    #root { max-width: 480px; width: 100%; margin: 0 auto; min-height: 100dvh; display: flex; flex-direction: column; }
-
-    /* ── ANIMATIONS ─────────────────────────────── */
-    @keyframes fadeUp  { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-    @keyframes breathe { 0%,100%{opacity:.4;transform:scale(1);} 50%{opacity:1;transform:scale(1.25);} }
-    @keyframes bounce  { 0%,60%,100%{transform:translateY(0);} 30%{transform:translateY(-9px);} }
-
-    /* ── SCREENS ────────────────────────────────── */
-    .screen { display: none; flex-direction: column; flex: 1; }
-    .screen.active { display: flex; animation: fadeUp .22s ease both; }
-
-    /* ════════════════════════════════════════════
-       ONBOARDING
-       ════════════════════════════════════════════ */
-    #screen-onboarding {
-      justify-content: space-between;
-      padding: calc(var(--safe-t) + 48px) 28px calc(var(--safe-b) + 40px);
-      background: var(--green); color: #fff;
+    #root {
+      max-width: 480px;
+      width: 100%;
+      margin: 0 auto;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
     }
-    .ob-logo { display:flex; flex-direction:column; align-items:center; gap:6px; }
-    .ob-dots { display:flex; flex-direction:column; gap:5px; }
-    .ob-dot  { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.5); animation:breathe 2.4s ease-in-out infinite; }
-    .ob-dot:nth-child(2) { animation-delay:.5s; background:rgba(255,255,255,.8); }
-    .ob-name { font-size:32px; font-weight:700; letter-spacing:-.02em; color:#fff; }
-    .ob-slides { flex:1; display:flex; flex-direction:column; justify-content:center; }
-    .ob-slide  { display:none; }
-    .ob-slide.active { display:block; animation:fadeUp .3s ease both; }
-    .ob-num   { font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.5); margin-bottom:12px; }
-    .ob-title { font-size:clamp(26px,7vw,34px); font-weight:700; line-height:1.15; letter-spacing:-.02em; color:#fff; margin-bottom:14px; }
-    .ob-body  { font-size:16px; color:rgba(255,255,255,.75); line-height:1.6; }
-    .ob-footer { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:32px; }
-    .ob-dots-nav { display:flex; gap:6px; }
-    .ob-dot-nav  { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.3); transition:all .2s; }
-    .ob-dot-nav.active { background:#fff; width:18px; border-radius:3px; }
-    .btn-ob { padding:14px 28px; border-radius:var(--r-sm); border:none; font-size:15px; font-weight:600; cursor:pointer; transition:all .18s; }
-    .btn-ob-skip { background:transparent; color:rgba(255,255,255,.6); }
-    .btn-ob-next { background:#fff; color:var(--green); }
-    .btn-ob-next:hover { background:rgba(255,255,255,.9); }
-
-    /* ════════════════════════════════════════════
-       APP SHELL
-       ════════════════════════════════════════════ */
-    #screen-app { padding:0; }
-
-    .app-header {
-      padding: calc(var(--safe-t) + 16px) 20px 14px;
-      display:flex; align-items:center; justify-content:space-between;
-      border-bottom:1px solid var(--border); background:var(--bg-card);
-      position:sticky; top:0; z-index:10;
-    }
-    .app-logo { display:flex; align-items:center; gap:10px; }
-    .app-logo-dots { display:flex; flex-direction:column; gap:4px; }
-    .app-logo-dot  { width:6px; height:6px; border-radius:50%; background:var(--green); animation:breathe 2.6s ease-in-out infinite; }
-    .app-logo-dot:nth-child(2) { animation-delay:.5s; }
-    .app-logo-name { font-size:18px; font-weight:700; letter-spacing:-.01em; }
-    .streak-badge  { display:none; align-items:center; gap:5px; padding:5px 10px; border-radius:100px; background:var(--green-lt); color:var(--green); font-size:12px; font-weight:600; }
-
-    .app-body { flex:1; overflow-y:auto; padding:20px 20px 100px; }
-
-    /* ── VIEWS ──────────────────────────────────── */
-    .view { display:none; }
-    .view.active { display:block; animation:fadeUp .2s ease both; }
-
-    /* ── CARDS ──────────────────────────────────── */
-    .card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r); padding:20px; box-shadow:var(--shadow); margin-bottom:14px; }
-    .card-title { font-size:18px; font-weight:700; letter-spacing:-.01em; margin-bottom:6px; }
-    .card-sub   { font-size:14px; color:var(--ink-2); line-height:1.55; }
-
-    /* ── INPUTS ─────────────────────────────────── */
-    .field { margin-bottom:14px; }
-    .field label { display:block; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3); font-weight:600; margin-bottom:6px; }
-    textarea, input[type="text"], input[type="email"] {
-      width:100%; padding:14px; border:1.5px solid var(--border); border-radius:var(--r-sm);
-      background:var(--bg-input); font-size:16px; font-family:inherit; color:var(--ink);
-      outline:none; transition:border-color .2s, box-shadow .2s; resize:none;
-      -webkit-appearance:none; appearance:none;
-    }
-    textarea:focus, input:focus { border-color:var(--green-2); box-shadow:0 0 0 3px rgba(46,90,74,.12); }
-    textarea::placeholder, input::placeholder { color:var(--ink-3); }
-
-    /* ── BUTTONS ────────────────────────────────── */
-    .btn {
-      display:flex; align-items:center; justify-content:center; gap:8px;
-      width:100%; min-height:52px; padding:14px 20px; border:none; border-radius:var(--r-sm);
-      font-family:inherit; font-size:16px; font-weight:600; cursor:pointer;
-      transition:all .18s; -webkit-tap-highlight-color:transparent;
-    }
-    .btn-primary { background:var(--green); color:#fff; box-shadow:0 4px 16px rgba(30,58,48,.28); }
-    .btn-primary:hover:not(:disabled) { background:var(--green-2); transform:translateY(-1px); }
-    .btn-primary:active  { transform:translateY(0); }
-    .btn-primary:disabled { opacity:.5; cursor:not-allowed; }
-    .btn-ghost { background:transparent; color:var(--ink-2); border:1.5px solid var(--border); min-height:46px; font-size:14px; }
-    .btn-ghost:hover { border-color:var(--ink-3); background:var(--bg-input); }
-    .btn-sm { min-height:40px; font-size:14px; padding:10px 16px; }
-
-    /* ── DIVIDER / LABEL ────────────────────────── */
-    .lbl { font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3); font-weight:600; margin-bottom:10px; }
-    .divider { height:1px; background:var(--border); margin:18px 0; }
-
-    /* ── BANNERS ────────────────────────────────── */
-    .banner {
-      display:none; align-items:flex-start; gap:10px; padding:13px 15px;
-      border-radius:12px; margin-bottom:12px; font-size:13px; font-weight:500; line-height:1.5;
-      animation:fadeUp .2s ease both;
-    }
-    .banner.show { display:flex; }
-    .banner-pip  { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:3px; }
-    .banner-text { flex:1; }
-    .banner.green   { background:var(--green-lt); color:var(--green);  border:1px solid rgba(30,58,48,.14); }
-    .banner.amber   { background:var(--amber-lt); color:var(--amber);  border:1px solid rgba(122,74,18,.15); }
-    .banner.blue    { background:var(--blue-lt);  color:var(--blue);   border:1px solid rgba(30,50,90,.12); }
-    .banner.neutral { background:rgba(28,26,22,.04); color:var(--ink-2); border:1px solid var(--border); }
-    .banner.red     { background:rgba(138,32,16,.06); color:var(--red); border:1px solid rgba(138,32,16,.14); }
-    .banner.purple  { background:var(--purple-lt); color:var(--purple); border:1px solid rgba(58,32,96,.12); }
-    .banner.green  .banner-pip   { background:var(--green); }
-    .banner.amber  .banner-pip   { background:var(--amber); }
-    .banner.blue   .banner-pip   { background:var(--blue); }
-    .banner.neutral .banner-pip  { background:var(--ink-3); }
-    .banner.red    .banner-pip   { background:var(--red); }
-    .banner.purple .banner-pip   { background:var(--purple); }
-
-    /* ── IDENTITY STRIP ─────────────────────────── */
-    .identity-card { display:none; padding:16px; border-radius:12px; background:var(--green-lt); border:1px solid rgba(30,58,48,.15); margin-bottom:14px; animation:fadeUp .2s ease both; }
-    .identity-card.show { display:block; }
-    .identity-card .lbl { color:var(--green-2); margin-bottom:5px; }
-    .identity-card .identity-text { font-size:14px; color:var(--ink); line-height:1.5; }
-
-    /* ── LOADING ────────────────────────────────── */
-    .loading { display:none; flex-direction:column; align-items:center; gap:16px; padding:32px 0; }
-    .loading.show { display:flex; }
-    .loading-dots { display:flex; gap:7px; }
-    .loading-dot  { width:8px; height:8px; border-radius:50%; background:var(--green); animation:bounce 1.2s ease-in-out infinite; }
-    .loading-dot:nth-child(2) { animation-delay:.15s; }
-    .loading-dot:nth-child(3) { animation-delay:.3s; }
-    .loading-text { font-size:14px; color:var(--ink-3); }
-
-    /* ── RESULT / INSIGHT BOX ───────────────────── */
-    .result-zone { display:none; }
-    .result-zone.show { display:block; animation:fadeUp .3s ease both; }
-    .insight-box {
-      background:linear-gradient(135deg,rgba(30,58,48,.05),rgba(46,90,74,.04));
-      border:1.5px solid rgba(30,58,48,.15); border-radius:var(--r); padding:22px; margin-bottom:14px;
-    }
-    .insight-section { margin-bottom:16px; }
-    .insight-section:last-child { margin-bottom:0; }
-    .insight-tag  { font-size:10px; letter-spacing:.15em; text-transform:uppercase; color:var(--green-2); font-weight:600; margin-bottom:6px; }
-    .insight-body { font-size:16px; line-height:1.6; color:var(--ink); font-style:italic; }
-    .insight-q .insight-body { color:var(--green); font-weight:500; font-style:normal; }
-    .insight-coherencia .insight-body { font-style:normal; font-size:15px; color:var(--ink-2); }
-    .insight-impacto .insight-body { font-style:normal; font-size:15px; color:var(--ink-2); }
-
-    /* ── BOTTOM NAV ─────────────────────────────── */
-    .bottom-nav {
-      position:sticky; bottom:0; display:flex;
-      background:var(--bg-card); border-top:1px solid var(--border);
-      padding-bottom:var(--safe-b); box-shadow:0 -4px 20px rgba(28,26,22,.07); z-index:10;
-    }
-    .nav-btn {
-      flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
-      gap:3px; padding:10px 4px; border:none; background:transparent;
-      font-family:inherit; font-size:10px; font-weight:600; letter-spacing:.03em;
-      color:var(--ink-3); cursor:pointer; min-height:56px; transition:color .18s;
-      -webkit-tap-highlight-color:transparent;
-    }
-    .nav-btn.active { color:var(--green); }
-    .nav-icon { font-size:18px; line-height:1; }
-
-    /* ════════════════════════════════════════════
-       HISTORIAL
-       ════════════════════════════════════════════ */
-    .hist-item { background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:10px; transition:transform .15s; }
-    .hist-item:hover { transform:translateY(-1px); box-shadow:var(--shadow-m); }
-    .hist-title { font-size:15px; color:var(--ink); margin-bottom:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .hist-meta  { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-    .hist-tag   { padding:2px 8px; border-radius:100px; font-size:11px; font-weight:600; }
-    .hist-tag.evitador   { background:var(--amber-lt); color:var(--amber); }
-    .hist-tag.protector  { background:var(--blue-lt);  color:var(--blue); }
-    .hist-tag.constructor { background:var(--green-lt); color:var(--green); }
-    .hist-dir   { padding:2px 8px; border-radius:100px; font-size:11px; font-weight:600; }
-    .hist-dir.expansion  { background:var(--green-lt); color:var(--green); }
-    .hist-dir.proteccion { background:var(--blue-lt);  color:var(--blue); }
-    .hist-dir.cambio     { background:var(--amber-lt); color:var(--amber); }
-    .hist-date  { font-size:12px; color:var(--ink-3); }
-
-    /* ════════════════════════════════════════════
-       PERFIL / IDENTIDAD
-       ════════════════════════════════════════════ */
-    .stat-row { display:flex; gap:20px; margin-top:14px; }
-    .stat-num { font-size:32px; font-weight:700; line-height:1; color:var(--green); }
-    .stat-lbl { font-size:12px; color:var(--ink-3); margin-top:3px; }
-
-    /* ════════════════════════════════════════════
-       DIRECCIÓN VITAL (nueva pantalla)
-       ════════════════════════════════════════════ */
-    #view-direction {}
-
-    .dir-hero {
-      background:var(--green); color:#fff; border-radius:var(--r);
-      padding:24px 20px; margin-bottom:14px; text-align:center;
-    }
-    .dir-hero-label { font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.6); margin-bottom:8px; }
-    .dir-hero-value { font-size:36px; font-weight:700; letter-spacing:-.02em; margin-bottom:6px; }
-    .dir-hero-pct   { font-size:14px; color:rgba(255,255,255,.75); margin-bottom:14px; }
-    .dir-hero-msg   { font-size:14px; color:rgba(255,255,255,.85); line-height:1.55; }
-
-    .dir-bars { margin-bottom:14px; }
-    .dir-bar-row   { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
-    .dir-bar-label { font-size:13px; font-weight:600; width:90px; flex-shrink:0; }
-    .dir-bar-track { flex:1; height:8px; background:var(--bg-input); border-radius:4px; overflow:hidden; }
-    .dir-bar-fill  { height:100%; border-radius:4px; transition:width .6s ease; }
-    .dir-bar-fill.expansion  { background:var(--green); }
-    .dir-bar-fill.proteccion { background:var(--blue); }
-    .dir-bar-fill.cambio     { background:var(--amber); }
-    .dir-bar-pct   { font-size:12px; color:var(--ink-3); width:32px; text-align:right; flex-shrink:0; }
-
-    .dir-timeline-title { font-size:13px; font-weight:700; color:var(--ink); margin-bottom:12px; }
-    .dir-timeline { display:flex; flex-direction:column; gap:0; }
-    .dir-tl-item  { display:flex; align-items:flex-start; gap:12px; padding-bottom:16px; position:relative; }
-    .dir-tl-item:not(:last-child)::before {
-      content:''; position:absolute; left:11px; top:22px; bottom:0;
-      width:2px; background:var(--border);
-    }
-    .dir-tl-dot {
-      width:22px; height:22px; border-radius:50%; flex-shrink:0;
-      display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700;
-    }
-    .dir-tl-dot.expansion  { background:var(--green-lt); color:var(--green); }
-    .dir-tl-dot.proteccion { background:var(--blue-lt);  color:var(--blue); }
-    .dir-tl-dot.cambio     { background:var(--amber-lt); color:var(--amber); }
-    .dir-tl-body  { flex:1; padding-top:2px; }
-    .dir-tl-text  { font-size:14px; color:var(--ink); line-height:1.4; margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:280px; }
-    .dir-tl-meta  { display:flex; gap:8px; align-items:center; }
-    .dir-tl-dir   { font-size:11px; font-weight:600; }
-    .dir-tl-dir.expansion  { color:var(--green); }
-    .dir-tl-dir.proteccion { color:var(--blue); }
-    .dir-tl-dir.cambio     { color:var(--amber); }
-    .dir-tl-date  { font-size:11px; color:var(--ink-3); }
-
-    .empty-state { text-align:center; padding:40px 0; color:var(--ink-3); font-size:14px; }
-
-    /* ── MISC ───────────────────────────────────── */
-    .mt-8  { margin-top:8px; }
-    .mt-12 { margin-top:12px; }
-    .mt-16 { margin-top:16px; }
-    .row   { display:flex; gap:8px; }
-    .row .btn { flex:1; }
   </style>
 </head>
+
 <body>
 <div id="root">
 
-  <!-- ONBOARDING ─────────────────────────────── -->
+  <!-- ONBOARDING -->
   <div id="screen-onboarding" class="screen">
     <div class="ob-logo">
-      <div class="ob-dots"><div class="ob-dot"></div><div class="ob-dot"></div></div>
+      <div class="ob-dots">
+        <div class="ob-dot"></div>
+        <div class="ob-dot"></div>
+      </div>
       <div class="ob-name">Be U</div>
     </div>
+
     <div class="ob-slides">
-      <div class="ob-slide active" data-slide="0">
+      <div class="ob-slide active">
         <div class="ob-num">01 / 03</div>
         <div class="ob-title">No necesitas decidir mejor</div>
-        <div class="ob-body">La calidad de tus decisiones no depende de cuanto analices. Depende de desde donde decides.</div>
-      </div>
-      <div class="ob-slide" data-slide="1">
-        <div class="ob-num">02 / 03</div>
-        <div class="ob-title">Necesitas entender como decides</div>
-        <div class="ob-body">Todos tenemos patrones. Algunos nos protegen. Otros nos atrapan. Identificarlos es el primer paso.</div>
-      </div>
-      <div class="ob-slide" data-slide="2">
-        <div class="ob-num">03 / 03</div>
-        <div class="ob-title">Esto no es una app. Es un espejo.</div>
-        <div class="ob-body">Be U no te dira que hacer. Te mostrara como piensas para que puedas decidir desde tu mejor version.</div>
+        <div class="ob-body">La calidad de tus decisiones depende de desde donde decides.</div>
       </div>
     </div>
+
     <div class="ob-footer">
       <button class="btn-ob btn-ob-skip" onclick="OB.skip()">Omitir</button>
-      <div class="ob-dots-nav">
-        <div class="ob-dot-nav active"></div>
-        <div class="ob-dot-nav"></div>
-        <div class="ob-dot-nav"></div>
-      </div>
-      <button class="btn-ob btn-ob-next" id="ob-next" onclick="OB.next()">Siguiente</button>
+      <button class="btn-ob btn-ob-next" onclick="OB.next()">Siguiente</button>
     </div>
   </div>
 
-  <!-- APP ────────────────────────────────────── -->
+  <!-- APP -->
   <div id="screen-app" class="screen">
 
     <div class="app-header">
       <div class="app-logo">
-        <div class="app-logo-dots">
-          <div class="app-logo-dot"></div>
-          <div class="app-logo-dot"></div>
-        </div>
         <div class="app-logo-name">Be U</div>
-      </div>
-      <div class="streak-badge" id="streakBadge">
-        <span>&#128293;</span>
-        <span id="streakCount">0</span>
-        <span>dias</span>
       </div>
     </div>
 
-    <div class="app-body" id="appBody">
+    <div class="app-body">
 
-      <!-- ── VIEW: REFLEXIÓN ────────────────── -->
-      <div class="view active" id="view-reflect">
+      <div class="view active">
 
-        <!-- Banners -->
-        <div class="banner" id="bannerCoach">  <span class="banner-pip"></span><span class="banner-text" id="bannerCoachText"></span></div>
-        <div class="banner" id="bannerPattern"><span class="banner-pip"></span><span class="banner-text" id="bannerPatternText"></span></div>
-        <div class="banner" id="bannerStreak"> <span class="banner-pip"></span><span class="banner-text" id="bannerStreakText"></span></div>
-        <div class="banner" id="bannerCoherence"><span class="banner-pip"></span><span class="banner-text" id="bannerCoherenceText"></span></div>
-
-        <!-- Identity -->
-        <div class="identity-card" id="identityCard">
-          <div class="lbl">Tu patron dominante</div>
-          <div class="identity-text" id="identityText"></div>
-        </div>
-
-        <!-- Input -->
         <div class="card">
           <div class="card-title">Que decision tienes en mente?</div>
-          <div class="card-sub" style="margin-bottom:14px">Describela como quieras. Sin filtros.</div>
-          <div class="field">
-            <textarea id="decisionInput" rows="5" placeholder="Escribe lo que tienes en mente..." aria-label="Describe tu decision"></textarea>
-          </div>
-          <button class="btn btn-primary" id="btnAnalyze" onclick="APP.analyze()">
+
+          <textarea id="decisionInput" rows="5" placeholder="Escribe..."></textarea>
+
+          <button class="btn btn-primary" onclick="APP.analyze()">
             Ver lo que pasa
           </button>
         </div>
 
-        <!-- Loading -->
-        <div class="loading" id="loading">
-          <div class="loading-dots">
-            <div class="loading-dot"></div>
-            <div class="loading-dot"></div>
-            <div class="loading-dot"></div>
-          </div>
-          <div class="loading-text" aria-live="polite">Analizando tu decision...</div>
-        </div>
-
-        <!-- Result -->
-        <div class="result-zone" id="resultZone" aria-live="polite">
-          <div class="insight-box">
-
-            <div class="insight-section">
-              <div class="insight-tag">Reflexion</div>
-              <div class="insight-body" id="insightReflexion"></div>
-            </div>
-
-            <div class="divider" style="margin:14px 0"></div>
-
-            <div class="insight-section">
-              <div class="insight-tag">Insight</div>
-              <div class="insight-body" id="insightInsight"></div>
-            </div>
-
-            <div class="divider" style="margin:14px 0"></div>
-
-            <div class="insight-section insight-impacto">
-              <div class="insight-tag">Impacto</div>
-              <div class="insight-body" id="insightImpacto"></div>
-            </div>
-
-            <div class="divider" style="margin:14px 0"></div>
-
-            <div class="insight-section insight-coherencia">
-              <div class="insight-tag">Coherencia con tus decisiones</div>
-              <div class="insight-body" id="insightCoherencia"></div>
-            </div>
-
-            <div class="divider" style="margin:14px 0"></div>
-
-            <div class="insight-section insight-q">
-              <div class="insight-tag">Pregunta para ti</div>
-              <div class="insight-body" id="insightPregunta"></div>
-            </div>
-
-          </div>
-          <div class="row">
-            <button class="btn btn-ghost btn-sm" onclick="APP.reset()">Nueva reflexion</button>
-          </div>
-        </div>
-
-      </div><!-- /view-reflect -->
-
-      <!-- ── VIEW: DECISIONES ───────────────── -->
-      <div class="view" id="view-history">
-        <div class="card-title" style="margin-bottom:14px">Tus decisiones</div>
-        <div id="histList"></div>
       </div>
 
-      <!-- ── VIEW: PERFIL ───────────────────── -->
-      <div class="view" id="view-identity">
-        <div class="card-title" style="margin-bottom:14px">Tu perfil de decision</div>
-        <div id="identityProfile"></div>
-      </div>
+    </div>
 
-      <!-- ── VIEW: DIRECCIÓN (nueva) ───────── -->
-      <div class="view" id="view-direction">
-        <div id="directionContent"></div>
-      </div>
+  </div>
 
-    </div><!-- /app-body -->
-
-    <!-- Bottom Nav (4 pestanas) -->
-    <nav class="bottom-nav" aria-label="Navegacion">
-      <button class="nav-btn active" id="navReflect"   onclick="APP.showView('reflect')"   aria-label="Reflexion">
-        <span class="nav-icon">&#9679;</span>Reflexion
-      </button>
-      <button class="nav-btn" id="navHistory"   onclick="APP.showView('history')"   aria-label="Decisiones">
-        <span class="nav-icon">&#9632;</span>Decisiones
-      </button>
-      <button class="nav-btn" id="navIdentity"  onclick="APP.showView('identity')"  aria-label="Perfil">
-        <span class="nav-icon">&#9670;</span>Perfil
-      </button>
-      <button class="nav-btn" id="navDirection" onclick="APP.showView('direction')" aria-label="Direccion">
-        <span class="nav-icon">&#8679;</span>Direccion
-      </button>
-    </nav>
-
-  </div><!-- /screen-app -->
-
-</div><!-- #root -->
+</div>
 
 <script src="hl-engine.js"></script>
 <script src="habit.js"></script>
 <script src="onboarding.js"></script>
 <script src="app.js"></script>
+
 </body>
 </html>
