@@ -15,54 +15,136 @@
   <title>Be U</title>
 
   <style>
-    /* ── TOKENS ─────────────────────────────────── */
+    /* ── BASE ───────────────────────── */
     :root {
-      --bg:         #f4f1ea;
-      --bg-card:    #faf8f4;
-      --bg-input:   #edeae2;
-      --ink:        #1c1a16;
-      --ink-2:      #4a4640;
-      --ink-3:      #8a8480;
-      --green:      #1e3a30;
-      --green-2:    #2e5a4a;
-      --green-lt:   rgba(30,58,48,.09);
-      --amber:      #7a4a12;
-      --amber-lt:   rgba(122,74,18,.09);
-      --blue:       #1e325a;
-      --blue-lt:    rgba(30,50,90,.08);
-      --red:        #8a2010;
-      --purple:     #3a2060;
-      --purple-lt:  rgba(58,32,96,.07);
-      --border:     rgba(28,26,22,.1);
-      --shadow:     0 2px 12px rgba(28,26,22,.08);
-      --shadow-m:   0 6px 24px rgba(28,26,22,.11);
-      --r:          16px;
-      --r-sm:       10px;
-      --safe-t:     env(safe-area-inset-top, 0px);
-      --safe-b:     env(safe-area-inset-bottom, 0px);
+      --bg: #f4f1ea;
+      --card: #ffffff;
+      --ink: #1c1a16;
+      --green: #1e3a30;
+      --border: rgba(0,0,0,.08);
     }
 
-    /* RESET */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { height: 100%; -webkit-text-size-adjust: 100%; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
       font-family: -apple-system, 'Segoe UI', sans-serif;
       background: var(--bg);
       color: var(--ink);
-      min-height: 100dvh;
-      font-size: 16px;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      overscroll-behavior: none;
+      min-height: 100vh;
     }
 
     #root {
       max-width: 480px;
-      width: 100%;
       margin: 0 auto;
-      min-height: 100dvh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
+    }
+
+    /* ── SCREENS ───────────────────── */
+    .screen { display: none; flex-direction: column; }
+    .screen.active { display: flex; }
+
+    /* ── ONBOARDING ───────────────── */
+    #screen-onboarding {
+      background: var(--green);
+      color: white;
+      padding: 40px 20px;
+      justify-content: space-between;
+      min-height: 100vh;
+    }
+
+    .ob-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .ob-body {
+      opacity: .8;
+      line-height: 1.5;
+    }
+
+    .ob-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+
+    .btn-ob {
+      padding: 12px 20px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-ob-next {
+      background: white;
+      color: var(--green);
+    }
+
+    .btn-ob-skip {
+      background: transparent;
+      color: rgba(255,255,255,.6);
+    }
+
+    /* ── APP ───────────────────────── */
+    .app-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      background: white;
+      font-weight: 700;
+    }
+
+    .app-body {
+      padding: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid var(--border);
+    }
+
+    .card-title {
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+      font-family: inherit;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 8px;
+      border: none;
+      background: var(--green);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn:disabled {
+      opacity: .5;
+    }
+
+    /* ── RESULT ───────────────────── */
+    .result {
+      margin-top: 20px;
+      padding: 16px;
+      background: #faf8f4;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      line-height: 1.5;
     }
   </style>
 </head>
@@ -71,20 +153,11 @@
 <div id="root">
 
   <!-- ONBOARDING -->
-  <div id="screen-onboarding" class="screen">
-    <div class="ob-logo">
-      <div class="ob-dots">
-        <div class="ob-dot"></div>
-        <div class="ob-dot"></div>
-      </div>
-      <div class="ob-name">Be U</div>
-    </div>
-
-    <div class="ob-slides">
-      <div class="ob-slide active">
-        <div class="ob-num">01 / 03</div>
-        <div class="ob-title">No necesitas decidir mejor</div>
-        <div class="ob-body">La calidad de tus decisiones depende de desde donde decides.</div>
+  <div id="screen-onboarding" class="screen active">
+    <div>
+      <div class="ob-title">No necesitas decidir mejor</div>
+      <div class="ob-body">
+        La calidad de tus decisiones depende de desde donde decides.
       </div>
     </div>
 
@@ -97,27 +170,21 @@
   <!-- APP -->
   <div id="screen-app" class="screen">
 
-    <div class="app-header">
-      <div class="app-logo">
-        <div class="app-logo-name">Be U</div>
-      </div>
-    </div>
+    <div class="app-header">Be U</div>
 
     <div class="app-body">
 
-      <div class="view active">
+      <div class="card">
+        <div class="card-title">¿Qué decisión tienes en mente?</div>
 
-        <div class="card">
-          <div class="card-title">Que decision tienes en mente?</div>
+        <textarea id="decisionInput" rows="5" placeholder="Escribe..."></textarea>
 
-          <textarea id="decisionInput" rows="5" placeholder="Escribe..."></textarea>
-
-          <button class="btn btn-primary" onclick="APP.analyze()">
-            Ver lo que pasa
-          </button>
-        </div>
-
+        <button class="btn" id="btnAnalyze" onclick="APP.analyze()">
+          Ver lo que pasa
+        </button>
       </div>
+
+      <div class="result" id="resultBox" style="display:none;"></div>
 
     </div>
 
