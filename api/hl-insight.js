@@ -1,5 +1,6 @@
 export default async function handler(req, res) {
 
+  // ✅ CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -44,27 +45,20 @@ Sé claro, profundo y humano.
     const response = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
-        "Authorization": Bearer ${process.env.OPENAI_API_KEY},
+        "Authorization": Bearer ${process.env.OPENAI_API_KEY}, // ✅ AQUÍ ESTÁ EL FIX
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "gpt-4.1-mini",
+        model: "gpt-5",
         input: prompt
       })
     });
 
     const data = await response.json();
 
-    let text = "";
-
-    try {
-      text = data.output?.[0]?.content?.[0]?.text || "";
-    } catch {
-      text = JSON.stringify(data);
-    }
+    const text = data.output?.[0]?.content?.[0]?.text || "No response";
 
     let parsed;
-
     try {
       parsed = JSON.parse(text);
     } catch {
@@ -80,6 +74,7 @@ Sé claro, profundo y humano.
     return res.status(200).json(parsed);
 
   } catch (err) {
+    console.error(err); // 👈 importante para logs
     return res.status(500).json({ error: err.message });
   }
 }
