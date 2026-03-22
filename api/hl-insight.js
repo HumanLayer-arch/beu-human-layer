@@ -1,4 +1,15 @@
 export default async function handler(req, res) {
+
+  // ✅ CORS (SOLUCIONA TU ERROR ACTUAL)
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  // ✅ SOLO PERMITIR POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -32,6 +43,7 @@ Responde en JSON con este formato:
 Sé claro, profundo y humano.
 `;
 
+    // ✅ LLAMADA CORRECTA A OPENAI
     const response = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: {
@@ -39,16 +51,24 @@ Sé claro, profundo y humano.
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "gpt-4.1-mini",
+        model: "gpt-5",
         input: prompt
       })
     });
 
     const data = await response.json();
 
-    const text = data.output?.[0]?.content?.[0]?.text || "";
+    // 🔍 EXTRAER TEXTO DE FORMA SEGURA
+    let text = "";
+
+    try {
+      text = data.output?.[0]?.content?.[0]?.text || "";
+    } catch {
+      text = JSON.stringify(data);
+    }
 
     let parsed;
+
     try {
       parsed = JSON.parse(text);
     } catch {
