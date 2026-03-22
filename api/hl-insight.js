@@ -39,14 +39,14 @@ Sé claro, profundo y humano.
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "gpt-5",
+        model: "gpt-4.1-mini",
         input: prompt
       })
     });
 
     const data = await response.json();
 
-    const text = data.output[0].content[0].text;
+    const text = data.output?.[0]?.content?.[0]?.text || "";
 
     let parsed;
     try {
