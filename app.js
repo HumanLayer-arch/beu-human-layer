@@ -12,7 +12,7 @@ var APP = (function () {
     }
 
     try {
-      const res = await fetch('https://vital-hl.vercel.app/api/hl-insight', {
+      const res = await fetch('https://beu-human-layer.vercel.app/api/hl-insight', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ contexto: text })
