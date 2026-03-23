@@ -115,22 +115,27 @@ export default async function handler(req, res) {
     ? `\n\nHistorial reciente de direcciones vitales: ${safeDirs.join(' → ')}.` : '';
 
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://api.openai.com/v1/responses', {
       method:  'POST',
       headers: {
         'Content-Type':  'application/json',
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
       },
       body: JSON.stringify({
-        model:       'gpt-4o-mini',
-        max_tokens:  900,
-        temperature: 0.7,
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          { role: 'user',   content: contexto + flagCtx + dirCtx }
-        ]
-      })
-    });
+  model: 'gpt-4o-mini',
+  input: [
+    {
+      role: 'system',
+      content: SYSTEM_PROMPT
+    },
+    {
+      role: 'user',
+      content: contexto + flagCtx + dirCtx
+    }
+  ],
+  temperature: 0.7,
+  max_output_tokens: 900
+});
 
     if (!response.ok) {
       const errText = await response.text().catch(() => '');
@@ -139,7 +144,7 @@ export default async function handler(req, res) {
     }
 
     const data    = await response.json();
-    const rawText = data?.choices?.[0]?.message?.content || '';
+    const rawText = data?.output?.[0]?.content?.[0]?.text || '';
 
     let parsed;
     try {
