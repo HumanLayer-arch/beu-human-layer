@@ -238,7 +238,6 @@ try {
 }
     clearTimeout(timeout);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
     if (!data?.reflexion) throw new Error('Respuesta incompleta');
     return data;
   } catch {
