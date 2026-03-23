@@ -226,6 +226,16 @@ async function llamarAPI(contexto, flags, recentDirections) {
     recentDirections
   })
 });
+     console.log('STATUS:', res.status);
+const text = await res.text();
+console.log('RAW RESPONSE:', text);
+
+let data;
+try {
+  data = JSON.parse(text);
+} catch (e) {
+  throw new Error('Respuesta no es JSON');
+}
     clearTimeout(timeout);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
