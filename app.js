@@ -14,7 +14,7 @@
 const SUPABASE_URL = 'https://TU_PROJECT.supabase.co';
 const SUPABASE_KEY = 'TU_ANON_KEY';
 
-const HL_ENDPOINT  = '/api/hl-insight';
+const HL_ENDPOINT  = "/api/hl-insight";
 const HL_TIMEOUT   = 9000; // ms
 
 /* ── CLIENTE SUPABASE ────────────────────────────────────────── */
