@@ -14,7 +14,7 @@
 const SUPABASE_URL = 'https://sjyidyymmeasjdrwdlsd.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_CtLe0WxLz2TwdcRVLZ84uA_-soFwz4q';
 
-const HL_ENDPOINT  = '/api/hl-insight';
+const HL_ENDPOINT = 'https://beu-human-layer.vercel.app/api/hl-insight';
 const HL_TIMEOUT   = 9000; // ms
 
 /* ── CLIENTE SUPABASE ────────────────────────────────────────── */
