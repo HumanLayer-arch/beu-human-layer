@@ -215,12 +215,17 @@ async function llamarAPI(contexto, flags, recentDirections) {
   const timeout = setTimeout(() => ctrl.abort(), HL_TIMEOUT);
 
   try {
-    const res = await fetch(HL_ENDPOINT, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ contexto, flags, recentDirections }),
-      signal:  ctrl.signal
-    });
+    const res = await fetch('https://beu-human-layer.vercel.app/api/hl-insight', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    contexto,
+    flags,
+    recentDirections
+  })
+});
     clearTimeout(timeout);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
