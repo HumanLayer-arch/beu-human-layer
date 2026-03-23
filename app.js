@@ -11,10 +11,10 @@
    Reemplaza con tus valores de Supabase.
    Los encontrarás en: Project Settings → API
    ──────────────────────────────────────────────────────────────── */
-const SUPABASE_URL = 'https://TU_PROJECT.supabase.co';
-const SUPABASE_KEY = 'TU_ANON_KEY';
+const SUPABASE_URL = 'https://sjyidyymmeasjdrwdlsd.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_CtLe0WxLz2TwdcRVLZ84uA_-soFwz4q';
 
-const HL_ENDPOINT  = "/api/hl-insight";
+const HL_ENDPOINT  = '/api/hl-insight';
 const HL_TIMEOUT   = 9000; // ms
 
 /* ── CLIENTE SUPABASE ────────────────────────────────────────── */
