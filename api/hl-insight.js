@@ -72,8 +72,20 @@ function getFallback(flags) {
 }
 
 function safeParseJSON(text) {
-  const clean = text.replace(/```json|```/g, '').trim();
-  return JSON.parse(clean);
+  try {
+    const clean = text.replace(/json|/g, '').trim();
+    return JSON.parse(clean);
+  } catch (e) {
+    console.warn('[HL] JSON mal formateado, devolviendo texto bruto');
+
+    return {
+      reflexion: text.substring(0, 200),
+      insight: "El modelo ha respondido pero no en formato perfecto.",
+      impacto: "Variable.",
+      coherencia: "No se ha podido estructurar correctamente.",
+      pregunta: "¿Puedes reformular esto para entenderlo mejor?"
+    };
+  }
 }
 
 /* ── HANDLER ────────────────────────────────────────────────── */
