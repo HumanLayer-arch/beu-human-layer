@@ -133,7 +133,7 @@ const client = new OpenAI({
   max_output_tokens: 900
 });
 
-const rawText = response.output?.[0]?.content?.[0]?.text || '';
+const rawText = response.output_text || '';
     let parsed;
     try {
       parsed = safeParseJSON(rawText);
