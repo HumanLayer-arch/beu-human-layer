@@ -1,4 +1,4 @@
-// /api/hl-insight.js
+import OpenAI from "openai";// /api/hl-insight.js
 // Be U – Human Layer — Endpoint de inteligencia
 // Vercel Serverless Function (Node.js)
 //
@@ -78,7 +78,9 @@ function safeParseJSON(text) {
 
 /* ── HANDLER ────────────────────────────────────────────────── */
 export default async function handler(req, res) {
-
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
   // CORS — permite llamadas desde el frontend
   res.setHeader('Access-Control-Allow-Origin',  '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -115,21 +117,15 @@ export default async function handler(req, res) {
     ? `\n\nHistorial reciente de direcciones vitales: ${safeDirs.join(' → ')}.` : '';
 
   try {
-    const response = await fetch('https://api.openai.com/v1/responses', {
-      method:  'POST',
-      headers: {
-        'Content-Type':  'application/json',
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`
-      },
-      body: JSON.stringify({
-  model: 'gpt-4o-mini',
+    const response = await client.responses.create({
+  model: "gpt-4o-mini",
   input: [
     {
-      role: 'system',
+      role: "system",
       content: SYSTEM_PROMPT
     },
     {
-      role: 'user',
+      role: "user",
       content: contexto + flagCtx + dirCtx
     }
   ],
@@ -137,15 +133,7 @@ export default async function handler(req, res) {
   max_output_tokens: 900
 });
 
-    if (!response.ok) {
-      const errText = await response.text().catch(() => '');
-      console.error('[HL] OpenAI error:', response.status, errText.substring(0, 200));
-      return res.status(200).json(getFallback(safeFlags)); // fallback, no 500
-    }
-
-    const data    = await response.json();
-    const rawText = data?.output?.[0]?.content?.[0]?.text || '';
-
+const rawText = response.output?.[0]?.content?.[0]?.text || '';
     let parsed;
     try {
       parsed = safeParseJSON(rawText);
